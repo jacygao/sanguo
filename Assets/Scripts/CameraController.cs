@@ -20,14 +20,21 @@ public class CameraController : MonoBehaviour
     private Quaternion targetRotation;
     private Vector2 touchStartPos;
 
+    private Vector3 offset;
+
     void Start()
     {
         // Set the initial camera rotation
-        targetRotation = Quaternion.Euler(15f, 0f, 0f);
+        targetRotation = Quaternion.Euler(10f, 0f, 0f);
+        transform.rotation = targetRotation;
+        offset = new Vector3(0f, 10f, -20f);
+        transform.position = target.position + offset;
     }
 
     void LateUpdate()
     {
+        transform.position = target.position + offset;
+
         if (Input.touchCount == 1)
         {
             Touch touch = Input.GetTouch(0);
@@ -42,6 +49,9 @@ public class CameraController : MonoBehaviour
 
                 // Rotate the camera around the target based on swipe delta
                 transform.RotateAround(target.position, Vector3.up, swipeDelta.x * xSpeed * Time.deltaTime);
+
+                // Update the offset value after camera rotation
+                offset = transform.position - target.position;
 
                 // Update the touch start position for the next frame
                 touchStartPos = touch.position;
@@ -63,23 +73,23 @@ public class CameraController : MonoBehaviour
 
             // Only move the camera up and down the Y axis
             float yDirection = deltaMagnitudeDiff * 0.05f;
-            float newY = Mathf.Clamp(transform.position.y + yDirection, 7f, 30f);
+
+            float newY = Mathf.Clamp(transform.position.y + yDirection, 15f, 40f);
+
+            // Calculate the direction from the camera to the target
+            Vector3 directionToTarget = (target.position - transform.position).normalized;
+
+            // Calculate the rotation to look at the target
+            targetRotation = Quaternion.LookRotation(directionToTarget, Vector3.up) * Quaternion.Euler(-10f, 0, 0);
+
+            // Update the camera rotation
+            transform.rotation = Quaternion.Euler(targetRotation.eulerAngles);
 
             // Update the camera position
             transform.position = new Vector3(transform.position.x, newY, transform.position.z);
 
-            // Calculate the direction from the camera to the target
-            Vector3 directionToTarget = (target.position - transform.position).normalized;
-            
-            // Calculate the rotation to look at the target
-            targetRotation  = Quaternion.LookRotation(directionToTarget, Vector3.up);
-
-            // Limit the x rotation angle between 15 and 60 degrees
-            Vector3 eulerRotation = targetRotation.eulerAngles;
-            eulerRotation.x = Mathf.Clamp(eulerRotation.x, 15f, 60f);
-            targetRotation = Quaternion.Euler(eulerRotation);
-
-            transform.rotation = targetRotation;
+            // Update the offset value after camera rotation
+            offset = transform.position - target.position;
         }
     }
 

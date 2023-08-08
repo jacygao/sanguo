@@ -1,4 +1,0 @@
-repository "sanguo_ar_mobile@unity_pmkwqf9nwo9y0g@cloud.cn"
-  path "/"
-    br "/main"
-    co "/main"
