@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour
         // Set the initial camera rotation
         targetRotation = Quaternion.Euler(10f, 0f, 0f);
         transform.rotation = targetRotation;
-        offset = new Vector3(0f, 10f, -20f);
+        offset = new Vector3(0f, 5f, -20f);
         transform.position = target.position + offset;
     }
 

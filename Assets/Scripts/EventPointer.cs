@@ -12,7 +12,6 @@ public class EventPointer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Event Pointed initiated");
         eventPanelController = GameObject.Find("Canvas").GetComponent<EventPanelController>();
     }
 
@@ -24,12 +23,10 @@ public class EventPointer : MonoBehaviour
 
     private void OnMouseDown() 
     {
-        Debug.Log("Clicked on PC. location: " + EventLocation);
         eventPanelController.OpenEventPanel();
     }
 
     private void OnTouchDown() 
     {
-        Debug.Log("Tapped on mobile");
     }
 }
